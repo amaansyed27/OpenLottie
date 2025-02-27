@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottie File Preview</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Lottie File Preview</h1>
+            <p>Preview and get embed codes for your Lottie animations</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="fileInput" accept=".json" hidden>
+                    <div class="drop-zone-content">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>Drag & drop your Lottie JSON file here</p>
+                        <span>or</span>
+                        <button id="browseButton" class="button">Browse Files</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-container">
+                    <div id="lottiePreview"></div>
+                    <div class="preview-controls">
+                        <button id="playPauseBtn" class="control-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                        </button>
+                        <input type="range" id="progressSlider" min="0" max="100" value="0">
+                        <button id="loopBtn" class="control-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M17 1l4 4-4 4"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                                <path d="M7 23l-4-4 4-4"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="embed-section">
+                    <h2>Embed Codes</h2>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-platform="web">Web</button>
+                        <button class="tab-btn" data-platform="android-compose">Android (Compose)</button>
+                        <button class="tab-btn" data-platform="android-xml">Android (XML)</button>
+                        <button class="tab-btn" data-platform="ios">iOS</button>
+                        <button class="tab-btn" data-platform="flutter">Flutter</button>
+                        <button class="tab-btn" data-platform="react-native">React Native</button>
+                        <button class="tab-btn" data-platform="react">React</button>
+                    </div>
+                    <div class="code-container">
+                        <pre><code id="embedCode"></code></pre>
+                        <button id="copyBtn" class="button">Copy Code</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
