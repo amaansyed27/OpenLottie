@@ -1,14 +1,10 @@
 class LottiePreview {
     constructor() {
-        // Add theme related properties
-        this.currentTheme = localStorage.getItem('theme') || 'light';
         this.initializeElements();
         this.setupEventListeners();
-        this.initializeTheme();
         this.animation = null;
         this.isPlaying = false;
         this.isLooping = true;
-        this.initializeStyles();
     }
 
     initializeElements() {
@@ -23,7 +19,6 @@ class LottiePreview {
         this.tabButtons = document.querySelectorAll('.tab-btn');
         this.embedCode = document.getElementById('embedCode');
         this.copyBtn = document.getElementById('copyBtn');
-        this.themeToggleBtn = document.getElementById('themeToggle');
     }
 
     setupEventListeners() {
@@ -46,97 +41,6 @@ class LottiePreview {
 
         // Copy button event
         this.copyBtn.addEventListener('click', () => this.copyEmbedCode());
-
-        this.themeToggleBtn.addEventListener('click', () => this.toggleTheme());
-    }
-
-
-    nitializeTheme() {
-        // Set initial theme
-        document.documentElement.setAttribute('data-theme', this.currentTheme);
-        this.updateThemeIcon();
-        
-        // Check system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
-            if (!localStorage.getItem('theme')) {
-                this.currentTheme = e.matches ? 'dark' : 'light';
-                this.applyTheme();
-            }
-        });
-    }
-
-    toggleTheme() {
-        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-        this.applyTheme();
-        
-        // Save theme preference
-        localStorage.setItem('theme', this.currentTheme);
-        
-        // Add animation to theme toggle button
-        this.themeToggleBtn.classList.add('rotate');
-        setTimeout(() => {
-            this.themeToggleBtn.classList.remove('rotate');
-        }, 300);
-    }
-
-    applyTheme() {
-        document.documentElement.setAttribute('data-theme', this.currentTheme);
-        this.updateThemeIcon();
-        
-        // Update code editor theme if needed
-        if (this.animation) {
-            this.updateEmbedCode(this.animation.animationData);
-        }
-    }
-
-    updateThemeIcon() {
-        const icon = this.themeToggleBtn.querySelector('i');
-        if (this.currentTheme === 'dark') {
-            icon.className = 'fas fa-sun';
-            this.themeToggleBtn.setAttribute('data-tooltip', 'Switch to Light Mode');
-        } else {
-            icon.className = 'fas fa-moon';
-            this.themeToggleBtn.setAttribute('data-tooltip', 'Switch to Dark Mode');
-        }
-    }
-
-    // Add these CSS styles for the theme toggle animation
-    initializeStyles() {
-        const style = document.createElement('style');
-        style.textContent = `
-            .rotate {
-                animation: rotate-icon 0.3s ease-in-out;
-            }
-            
-            @keyframes rotate-icon {
-                0% { transform: rotate(0); }
-                100% { transform: rotate(360deg); }
-            }
-            
-            .theme-toggle button {
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .theme-toggle button::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 0;
-                height: 0;
-                background: rgba(99, 102, 241, 0.2);
-                border-radius: 50%;
-                transform: translate(-50%, -50%);
-                transition: width 0.3s, height 0.3s;
-            }
-            
-            .theme-toggle button:active::after {
-                width: 150%;
-                height: 150%;
-            }
-        `;
-        document.head.appendChild(style);
     }
 
     handleDragOver(e) {
@@ -165,7 +69,6 @@ class LottiePreview {
         }
     }
 
-    // Update the loadLottieFile method to consider theme
     loadLottieFile(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -174,42 +77,11 @@ class LottiePreview {
                 this.initializeLottieAnimation(animationData);
                 this.previewSection.style.display = 'block';
                 this.updateEmbedCode(animationData);
-                
-                // Add smooth fade-in animation
-                this.previewSection.style.opacity = '0';
-                requestAnimationFrame(() => {
-                    this.previewSection.style.transition = 'opacity 0.3s ease-in-out';
-                    this.previewSection.style.opacity = '1';
-                });
             } catch (error) {
-                this.showError('Invalid Lottie JSON file');
+                alert('Invalid Lottie JSON file');
             }
         };
         reader.readAsText(file);
-    }
-
-    showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        
-        // Style for error message
-        errorDiv.style.cssText = `
-            background-color: ${this.currentTheme === 'dark' ? '#dc2626' : '#ef4444'};
-            color: white;
-            padding: 1rem;
-            border-radius: var(--radius);
-            margin-top: 1rem;
-            text-align: center;
-            animation: slideIn 0.3s ease-out;
-        `;
-        
-        this.dropZone.parentNode.insertBefore(errorDiv, this.dropZone.nextSibling);
-        
-        setTimeout(() => {
-            errorDiv.style.animation = 'slideOut 0.3s ease-in';
-            setTimeout(() => errorDiv.remove(), 300);
-        }, 3000);
     }
 
     initializeLottieAnimation(animationData) {
