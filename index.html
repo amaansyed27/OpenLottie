@@ -3,122 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lottify - Lottie Animation Preview</title>
+    <title>Lottie File Preview</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <nav class="navbar">
-            <div class="logo">
-                <i class="fas fa-shapes"></i>
-                <span>Lottify</span>
+    <div class="container">
+        <header>
+            <h1>Lottie File Preview</h1>
+            <p>Preview and get embed codes for your Lottie animations</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="fileInput" accept=".json" hidden>
+                    <div class="drop-zone-content">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>Drag & drop your Lottie JSON file here</p>
+                        <span>or</span>
+                        <button id="browseButton" class="button">Browse Files</button>
+                    </div>
+                </div>
             </div>
-            <div class="theme-toggle">
-                <button id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-container">
+                    <div id="lottiePreview"></div>
+                    <div class="preview-controls">
+                        <button id="playPauseBtn" class="control-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                        </button>
+                        <input type="range" id="progressSlider" min="0" max="100" value="0">
+                        <button id="loopBtn" class="control-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M17 1l4 4-4 4"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                                <path d="M7 23l-4-4 4-4"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="embed-section">
+                    <h2>Embed Codes</h2>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-platform="web">Web</button>
+                        <button class="tab-btn" data-platform="android-compose">Android (Compose)</button>
+                        <button class="tab-btn" data-platform="android-xml">Android (XML)</button>
+                        <button class="tab-btn" data-platform="ios">iOS</button>
+                        <button class="tab-btn" data-platform="flutter">Flutter</button>
+                        <button class="tab-btn" data-platform="react-native">React Native</button>
+                        <button class="tab-btn" data-platform="react">React</button>
+                    </div>
+                    <div class="code-container">
+                        <pre><code id="embedCode"></code></pre>
+                        <button id="copyBtn" class="button">Copy Code</button>
+                    </div>
+                </div>
             </div>
-        </nav>
-
-        <div class="container">
-            <header class="hero">
-                <h1>Lottie File Preview</h1>
-                <p>Preview and generate code snippets for your Lottie animations across multiple platforms</p>
-                <div class="badge-container">
-                    <span class="badge">Modern</span>
-                    <span class="badge">Cross-Platform</span>
-                    <span class="badge">Developer-Friendly</span>
-                </div>
-            </header>
-
-            <main>
-                <div class="upload-section">
-                    <div class="drop-zone" id="dropZone">
-                        <input type="file" id="fileInput" accept=".json" hidden>
-                        <div class="drop-zone-content">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <p>Drag & drop your Lottie JSON file here</p>
-                            <span>or</span>
-                            <button id="browseButton" class="button">
-                                <i class="fas fa-folder-open"></i>
-                                Browse Files
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="preview-section" id="previewSection" style="display: none;">
-                    <div class="preview-container glass-effect">
-                        <div class="preview-header">
-                            <h3>Animation Preview</h3>
-                            <div class="preview-actions">
-                                <button class="icon-button" id="fullscreenBtn">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                                <button class="icon-button" id="downloadBtn">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="lottiePreview"></div>
-                        <div class="preview-controls">
-                            <button id="playPauseBtn" class="control-btn tooltip" data-tooltip="Play/Pause">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="progress-container">
-                                <input type="range" id="progressSlider" min="0" max="100" value="0">
-                                <div class="time-display">
-                                    <span id="currentTime">0:00</span>
-                                    <span id="totalTime">0:00</span>
-                                </div>
-                            </div>
-                            <button id="loopBtn" class="control-btn tooltip" data-tooltip="Toggle Loop">
-                                <i class="fas fa-repeat"></i>
-                            </button>
-                            <button id="speedBtn" class="control-btn tooltip" data-tooltip="Playback Speed">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="embed-section glass-effect">
-                        <div class="section-header">
-                            <h2>Implementation</h2>
-                            <div class="platform-select">
-                                <select id="platformSelect" class="select-styled">
-                                    <option value="web">Web</option>
-                                    <option value="android-compose">Android (Compose)</option>
-                                    <option value="android-xml">Android (XML)</option>
-                                    <option value="ios">iOS</option>
-                                    <option value="flutter">Flutter</option>
-                                    <option value="react-native">React Native</option>
-                                    <option value="react">React</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="code-container">
-                            <div class="code-header">
-                                <div class="file-info">
-                                    <i class="fas fa-code"></i>
-                                    <span id="filename">implementation.txt</span>
-                                </div>
-                                <div class="code-actions">
-                                    <button class="icon-button tooltip" data-tooltip="Copy" id="copyBtn">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <pre><code id="embedCode"></code></pre>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
