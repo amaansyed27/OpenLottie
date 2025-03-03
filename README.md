@@ -3,4 +3,4 @@ A Lottie file previewer which also gives code snippets for various platforms
 # Live At
 https://openlottie.vercel.app/
 # Working Progress
-## Android App Coming Soon
+Android App Coming Soon
